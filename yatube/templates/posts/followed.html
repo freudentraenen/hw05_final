@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}
+  Ваши подписки
+{% endblock %}
+{% block content %}
+  <div class="container py-5">
+    {% include 'posts/includes/switcher.html' %}
+    {% if post_list %}
+      {% for post in post_list %}
+        {% include 'posts/includes/post_card.html' %}
+        {% if not forloop.last %}<hr>{% endif %}
+      {% endfor %}
+      {% include 'posts/includes/paginator.html' %}
+    {% else %}
+      <h5>Вы пока ни на кого не подписаны.</h5>
+    {% endif %}
+  </div>
+{% endblock %}

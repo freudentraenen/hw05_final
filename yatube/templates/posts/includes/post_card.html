@@ -1,0 +1,27 @@
+{% load thumbnail %}
+{% load tz %}
+<article>
+  <ul>
+    <li>
+      Автор: <a id="author-group-link" href="{% url 'posts:profile' post.author.username %}">{{ post.author.get_full_name }}</a>
+    </li>
+    {% if post.group %}
+      {% if not group %}
+        <li>
+          Группа: <a id="author-group-link" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group.title }}</a>
+        </li>
+      {% endif %}
+    {% endif %}
+    <li>
+      {% timezone local_timezone %}
+        Дата публикации: {{ post.created|date:"d E Y H:i" }}
+      {% endtimezone %}
+    </li>
+  </ul>
+  {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+    <img src="{{ im.url }}">
+  {% endthumbnail %}
+  <p>{{ post.text }}</p>
+  <a href="{% url 'posts:post_detail' post.id %}">Подробная информация</a><br>
+</article>
+   

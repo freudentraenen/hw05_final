@@ -1,0 +1,24 @@
+{% with request.resolver_match.view_name as view_name %}
+{% if user.is_authenticated %}
+  <div class="row my-3">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a 
+          class="nav-link {% if view_name == 'posts:index' %}active{% endif %}"
+          href="{% url 'posts:index' %}"
+        >
+          <h3>Последние обновления на сайте</h3>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a 
+           class="nav-link {% if view_name == 'posts:followed' %}active{% endif %}"
+           href="{% url 'posts:followed' %}"
+        >
+          <h3>Ваши подписки</h3>
+        </a>
+      </li>
+    </ul>
+  </div>
+{% endif %}
+{% endwith %}

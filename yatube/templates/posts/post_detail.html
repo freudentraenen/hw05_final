@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load thumbnail %}
+{% load user_filters %}
+{% block title %}Запись {{ post.text|truncatechars:30 }}{% endblock %}
+{% block content %}
+<main>
+  <div class="container py-5">
+    <div class="row">
+      <aside class="col-12 col-md-3">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            {% timezone local_timezone %}
+              Дата публикации: {{ post.created }}
+            {% endtimezone %}
+          </li>
+          {% if post.group %}   
+            <li class="list-group-item">
+              Группа: <a id="author-group-link" href="{% url 'posts:group_list' post.group.slug %}">{{ post.group }}</a>
+              {{hui}}
+              {{norm}}
+            </li>
+          {% endif %}
+          <li class="list-group-item">
+            Автор: {{ post.author.get_full_name }}
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Всего записей автора:  <span>{{ post.author.posts.count }}</span>
+          </li>
+          <li class="list-group-item">
+            <a href="{% url 'posts:profile' post.author.username %}">
+              Все записи пользователя
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <article class="col-12 col-md-9">
+        {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+          <img src="{{ im.url }}">
+        {% endthumbnail %}
+        <p>
+          {{ post.text }}
+        </p>
+        {% if current_user == post.author %}
+          <a class="btn btn-primary" href="{% url 'posts:post_edit' post.id %}">
+            Редактировать запись
+          </a>
+        {% endif %}
+        {% include 'posts/includes/comments.html' %}
+      </article>
+    </div> 
+  </div>
+</main>
+{% endblock %}
