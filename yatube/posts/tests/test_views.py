@@ -164,7 +164,7 @@ class ViewsTests(TestCase):
     def test_auth_user_can_follow(self):
         self.authorized_client.get(reverse(
             'posts:profile_follow',
-            kwargs={'username':self.user2.username}
+            kwargs={'username': self.user2.username}
         ))
         self.assertTrue(
             Follow.objects.filter(
@@ -172,7 +172,7 @@ class ViewsTests(TestCase):
                 author=self.user2
             ).exists()
         )
-    
+
     def test_auth_user_can_unfollow(self):
         Follow.objects.create(
             user=self.user,
@@ -180,7 +180,7 @@ class ViewsTests(TestCase):
         )
         self.authorized_client.get(reverse(
             'posts:profile_unfollow',
-            kwargs={'username':self.user2.username}
+            kwargs={'username': self.user2.username}
         ))
         self.assertFalse(
             Follow.objects.filter(

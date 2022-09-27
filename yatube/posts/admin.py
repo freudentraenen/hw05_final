@@ -28,6 +28,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('text',)
     list_filter = ('created', 'author')
 
+
 class FollowAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
@@ -36,6 +37,7 @@ class FollowAdmin(admin.ModelAdmin):
     )
     search_fields = ('user',)
     list_filter = ('author',)
+
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Group)

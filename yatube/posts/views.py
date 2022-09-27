@@ -3,7 +3,6 @@ from itertools import chain
 from operator import attrgetter
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.shortcuts import get_list_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -23,7 +22,9 @@ def paginator(request, post_list):
 
 def index(request):
     post_list = Post.objects.all()
-    LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+    LOCAL_TIMEZONE = datetime.datetime.now(
+        datetime.timezone.utc
+    ).astimezone().tzinfo
     context = {
         'page_obj': paginator(request, post_list),
         'local_timezone': LOCAL_TIMEZONE,
@@ -34,7 +35,9 @@ def index(request):
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     post_list = group.posts.all()
-    LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+    LOCAL_TIMEZONE = datetime.datetime.now(
+        datetime.timezone.utc
+    ).astimezone().tzinfo
     context = {
         'group': group,
         'page_obj': paginator(request, post_list),
@@ -45,7 +48,9 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+    LOCAL_TIMEZONE = datetime.datetime.now(
+        datetime.timezone.utc
+    ).astimezone().tzinfo
     if isinstance(request.user, AnonymousUser):
         following = False
     else:
@@ -67,7 +72,9 @@ def post_detail(request, post_id):
     current_user = request.user
     form = CommentForm()
     date = timezone.now
-    LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+    LOCAL_TIMEZONE = datetime.datetime.now(
+        datetime.timezone.utc
+    ).astimezone().tzinfo
     context = {
         'post': post,
         'current_user': current_user,
@@ -112,6 +119,7 @@ def post_edit(request, post_id):
     }
     return render(request, 'posts/post_create.html', context)
 
+
 @login_required
 def add_comment(request, post_id):
     user = request.user
@@ -124,6 +132,7 @@ def add_comment(request, post_id):
         comment.save()
     return redirect('posts:post_detail', post_id)
 
+
 @login_required
 def followed(request):
     user = request.user
@@ -135,12 +144,15 @@ def followed(request):
             key=attrgetter('created'),
             reverse=True,
         )
-    LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+    LOCAL_TIMEZONE = datetime.datetime.now(
+        datetime.timezone.utc
+    ).astimezone().tzinfo
     context = {
         'local_timezone': LOCAL_TIMEZONE,
         'post_list': post_list,
     }
     return render(request, 'posts/followed.html', context)
+
 
 @login_required
 def profile_follow(request, username):
@@ -157,6 +169,7 @@ def profile_follow(request, username):
         author=author,
         )
     return redirect('posts:profile', username)
+
 
 @login_required
 def profile_unfollow(request, username):
