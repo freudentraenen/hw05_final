@@ -134,7 +134,7 @@ def add_comment(request, post_id):
 
 
 @login_required
-def followed(request):
+def follow(request):
     user = request.user
     follows = Follow.objects.filter(user=user)
     post_list = []
@@ -161,7 +161,7 @@ def profile_follow(request, username):
     if Follow.objects.filter(
         user=user,
         author=author
-    ).exists():
+    ).exists() or user == author:
         pass
     else:
         Follow.objects.create(

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'uweg=t9upq$jj-%xu049eps!2&b$js7h4ca*r%f1ih_0ijxbp4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -150,3 +150,5 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+CSRF_FAILURE_VIEW = 'core.views.csrf_failure'

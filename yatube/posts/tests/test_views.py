@@ -213,6 +213,18 @@ class ViewsTests(TestCase):
         response = self.authorized_client2.get(reverse('posts:followed'))
         self.assertNotIn(post, response.context['post_list'])
 
+    def test_unable_to_follow_self(self):
+        self.authorized_client.get(reverse(
+            'posts:profile_follow',
+            kwargs={'username': self.user.username}
+        ))
+        self.assertFalse(
+            Follow.objects.filter(
+                user=self.user,
+                author=self.user
+            ).exists()
+        )
+
 
 class PaginatorViewsTest(TestCase):
     @classmethod
