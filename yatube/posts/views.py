@@ -165,8 +165,8 @@ def profile_follow(request, username):
         pass
     else:
         Follow.objects.create(
-        user=user,
-        author=author,
+            user=user,
+            author=author,
         )
     return redirect('posts:profile', username)
 
