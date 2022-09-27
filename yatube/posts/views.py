@@ -149,7 +149,7 @@ def follow(request):
     ).astimezone().tzinfo
     context = {
         'local_timezone': LOCAL_TIMEZONE,
-        'post_list': post_list,
+        'page_obj': paginator(request, post_list),
     }
     return render(request, 'posts/followed.html', context)
 

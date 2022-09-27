@@ -199,7 +199,7 @@ class ViewsTests(TestCase):
             author=self.user2
         )
         response = self.authorized_client.get(reverse('posts:followed'))
-        self.assertIn(post, response.context['post_list'])
+        self.assertIn(post, response.context['page_obj'])
 
     def test_not_followers_dont_have_new_post(self):
         Follow.objects.create(
@@ -211,7 +211,7 @@ class ViewsTests(TestCase):
             author=self.user2
         )
         response = self.authorized_client2.get(reverse('posts:followed'))
-        self.assertNotIn(post, response.context['post_list'])
+        self.assertNotIn(post, response.context['page_obj'])
 
     def test_unable_to_follow_self(self):
         self.authorized_client.get(reverse(
