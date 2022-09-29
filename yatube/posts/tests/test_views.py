@@ -138,10 +138,10 @@ class ViewsTests(TestCase):
             with self.subTest():
                 self.assertIn(self.post, response.context['page_obj'])
 
-    def another_group_doesnt_contain_new_post(self):
+    def test_another_group_doesnt_contain_new_post(self):
         response = self.guest_client.get(reverse(
             'posts:group_list',
-            kwargs={'slug': 'test=slug'}
+            kwargs={'slug': 'test-slug'}
         ))
         self.assertNotIn(self.post, response.context['page_obj'])
 
@@ -281,7 +281,7 @@ class PaginatorViewsTest(TestCase):
         ]
         for response in responses_first_page:
             with self.subTest():
-                self.assertEqual(len(response.context['page_obj']), 10)
+                self.assertEqual(len(response.context['page_obj']), 10)  #через count() не получается сделать
         for response in responses_second_page:
             with self.subTest():
                 self.assertEqual(len(response.context['page_obj']), 3)

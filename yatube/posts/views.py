@@ -1,12 +1,9 @@
 import datetime
-from itertools import chain
-from operator import attrgetter
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from django.contrib.auth.models import AnonymousUser
 
 from .models import Post, Group, User, Follow
 
@@ -22,7 +19,7 @@ def paginator(request, post_list):
 
 def index(request):
     post_list = Post.objects.all()
-    LOCAL_TIMEZONE = datetime.datetime.now(
+    LOCAL_TIMEZONE = datetime.datetime.now(  #добавлено, чтобы время публикации постов отображалось в часовом поясе пользователя
         datetime.timezone.utc
     ).astimezone().tzinfo
     context = {
@@ -51,12 +48,9 @@ def profile(request, username):
     LOCAL_TIMEZONE = datetime.datetime.now(
         datetime.timezone.utc
     ).astimezone().tzinfo
-    if isinstance(request.user, AnonymousUser):
-        following = False
-    else:
-        following = Follow.objects.filter(
-            user=request.user,
-            author=author
+    following = Follow.objects.filter( 
+            user=request.user if request.user.is_authenticated else None, 
+            author=author 
         ).exists()
     context = {
         'author': author,
@@ -136,14 +130,10 @@ def add_comment(request, post_id):
 @login_required
 def follow(request):
     user = request.user
-    follows = Follow.objects.filter(user=user)
-    post_list = []
+    follows = user.follower.all()
+    post_list = Post.objects.none()
     for follow in follows:
-        post_list = sorted(
-            (chain(follow.author.posts.all(), post_list)),
-            key=attrgetter('created'),
-            reverse=True,
-        )
+        post_list |= follow.author.posts.all()
     LOCAL_TIMEZONE = datetime.datetime.now(
         datetime.timezone.utc
     ).astimezone().tzinfo
@@ -158,15 +148,10 @@ def follow(request):
 def profile_follow(request, username):
     user = request.user
     author = get_object_or_404(User, username=username)
-    if Follow.objects.filter(
-        user=user,
-        author=author
-    ).exists() or user == author:
-        pass
-    else:
-        Follow.objects.create(
+    if user != author:
+        Follow.objects.get_or_create(
             user=user,
-            author=author,
+            author=author
         )
     return redirect('posts:profile', username)
 
