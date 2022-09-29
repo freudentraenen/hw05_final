@@ -19,7 +19,8 @@ def paginator(request, post_list):
 
 def index(request):
     post_list = Post.objects.all()
-    # добавлено, чтобы время публикации постов отображалось в часовом поясе пользователя
+    # добавлено, чтобы время публикации постов 
+    # отображалось в часовом поясе пользователя
     LOCAL_TIMEZONE = datetime.datetime.now(
         datetime.timezone.utc
     ).astimezone().tzinfo
