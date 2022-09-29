@@ -19,7 +19,8 @@ def paginator(request, post_list):
 
 def index(request):
     post_list = Post.objects.all()
-    LOCAL_TIMEZONE = datetime.datetime.now(  #добавлено, чтобы время публикации постов отображалось в часовом поясе пользователя
+    # добавлено, чтобы время публикации постов отображалось в часовом поясе пользователя
+    LOCAL_TIMEZONE = datetime.datetime.now(
         datetime.timezone.utc
     ).astimezone().tzinfo
     context = {
@@ -48,10 +49,10 @@ def profile(request, username):
     LOCAL_TIMEZONE = datetime.datetime.now(
         datetime.timezone.utc
     ).astimezone().tzinfo
-    following = Follow.objects.filter( 
-            user=request.user if request.user.is_authenticated else None, 
-            author=author 
-        ).exists()
+    following = Follow.objects.filter(
+        user=request.user if request.user.is_authenticated else None,
+        author=author
+    ).exists()
     context = {
         'author': author,
         'page_obj': paginator(request, author.posts.all()),

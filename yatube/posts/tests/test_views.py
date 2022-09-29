@@ -281,7 +281,8 @@ class PaginatorViewsTest(TestCase):
         ]
         for response in responses_first_page:
             with self.subTest():
-                self.assertEqual(len(response.context['page_obj']), 10)  #через count() не получается сделать
+                # через count() не получается сделать
+                self.assertEqual(len(response.context['page_obj']), 10)
         for response in responses_second_page:
             with self.subTest():
                 self.assertEqual(len(response.context['page_obj']), 3)
