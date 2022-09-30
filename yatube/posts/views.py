@@ -131,11 +131,7 @@ def add_comment(request, post_id):
 
 @login_required
 def follow(request):
-    user = request.user
-    follows = user.follower.all()
-    post_list = Post.objects.none()
-    for follow in follows:
-        post_list |= follow.author.posts.all()
+    post_list = Post.objects.filter(author__following__user=request.user)
     LOCAL_TIMEZONE = datetime.datetime.now(
         datetime.timezone.utc
     ).astimezone().tzinfo
